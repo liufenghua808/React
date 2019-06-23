@@ -1,5 +1,3 @@
-# React
-react相关知识
 一开始我们用的原生js写东西
 
 为了效率使用了jQuery
@@ -92,7 +90,7 @@ ReactDOM.render() 有三个参数
     - 如果元素属性是一个变量需要花括号  src={obj.xx} 
     - 受控组件、非受控组件
 - 事件
-    - onClick、onMouseOver...
+    - onClick、onMouseOver...  onClick={}
 
 ```
     onClick = {()=>{
@@ -152,7 +150,45 @@ ReactDOM.render() 有三个参数
     }
 
     修改数据
+
     this.setState({新数据})
+
+        第一个参数可以是对象也可以是函数
+        第二个参数
+            状态改变之后的回调
+
+
+        第一个参数为函数，函数的第一个参数为没改变的state,第二个参数为props
+
+        如果要改变状态得return一个*对象*
+
+        比如:
+            this.setState((prev,props)=>({
+                num:prev.num + 1
+            }))
+
+
+        setState,在包了一个定时器和原生事件的时候为同步的，别的时候就异步
+
+        原生事件:
+            componentDidMount(){
+                let btn = document.querySelector('button');
+                btn.onclick = function(){
+                    //原生事件
+                }
+            }
+
+        定时器:
+            add = () => {
+                setTimeout(()=>{
+                    this.setState({num:2})
+                    console.log(this.state.num); //2 同步
+                },10)
+            }
+        
+
+
+
 ```
 
 
@@ -242,6 +278,113 @@ ReactDOM.render() 有三个参数
 
 
 - ummonting阶段
+
+
+
+### ref
+可以快速的获取组件或者元素
+    在指定组件上写一个ref的属性，值就随意
+
+    ```
+        <App ref="app"/>  定义好了
+
+        this.refs.app 就能获得这个组件
+    ```
+
+### prop-types  验证传递数据的类型，目的（为了报错）
+
+- 安装 npm i prop-types -S
+
+- 引包 import PropType from  'prop-types';
+
+
+### 路由 https://reacttraining.com/react-router/
+
+- 安装 npm i react-router-dom -S
+
+- 引包 import {BrowserRouter as Router |HashRouter as Router,Route} from 'react-router-dom'
+
+    - 路由有2种
+        - 一种是hash路由  /#home
+        - 另一种history路由 /home
+
+- 使用
+    必须把Router放到根下
+        ```
+            ReactDOM.render((
+                <Router>
+                    <App />
+                </Router>
+            ),document.getbyId('xx'))
+
+
+            function App (){
+                return (
+                    <Route path="/" component={App}/>   
+                )
+            }
+
+        ```
+**注意**
+- 切换路由的时候可以通过组件内的props获取到路由信息
+    -   history  就是与H5的history一样，能够操作浏览器的历史记录
+
+    -  location  里面可以获取hash #，search ?，state:{key:value}
+
+    -  match   里面可以获取url,path
+
+### link
+- <Link to="/home" >首页</Link>   to="字符串"
+
+- <Link to={{pathname:'/home',hash:'#age=1',search:'?num=1',state:{}}} >
+
+
+### Route
+```
+exact
+    假设path="/one" 
+        如果此时**没有**加上exact
+        那么能匹配到
+            /one还能匹配到/one/two
+
+
+        如果如果此时**加上**exact
+        那么能匹配到
+            /one    
+
+            /one/two是匹配不到的
+
+    /one	/one/two	true	no
+    /one	/one/two	false	yes
+
+
+    例子:
+        path="/"   / -> home,如果不加exact,除了能匹配/还能匹配/about,/xx
+
+
+strict
+当加上strict之后，path="/one/"    url上输入的是/one（少一个斜杠）不能匹配，
+
+能匹配/one/或者/one/two
+
+
+/one/	/one	no
+/one/	/one/	yes
+/one/	/one/two	yes
+        
+
+```
+
+<Route path="/" component={组件}/>
+<Route path="/" component={()=>{return (<div>list</div>)}}/>
+
+
+render
+
+children
+
+
+
 
 
 
